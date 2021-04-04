@@ -1,18 +1,13 @@
-using System;
-using System.Text;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System;
+using System.Text;
 
 namespace FBI
 {
@@ -36,7 +31,22 @@ namespace FBI
                 ClockSkew = TimeSpan.Zero // remove delay of token when expire
             };
 
-
+            services
+                .AddAuthentication(options =>
+                {
+                    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
+                .AddJwtBearer(cfg =>
+                {
+                    cfg.TokenValidationParameters = tokenValidationParameters;
+                });
+            services.AddAuthorization(cfg =>
+            {
+                cfg.AddPolicy("Admin", policy => policy.RequireClaim("type", "Admin"));
+                cfg.AddPolicy("Agent", policy => policy.RequireClaim("type", "Agent"));
+                cfg.AddPolicy("ClearanceLevel1", policy => policy.RequireClaim("ClearanceLevel", "1", "2"));
+                cfg.AddPolicy("ClearanceLevel2", policy => policy.RequireClaim("ClearanceLevel", "2"));
+            });
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -47,6 +57,7 @@ namespace FBI
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
