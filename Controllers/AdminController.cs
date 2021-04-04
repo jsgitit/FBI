@@ -3,10 +3,8 @@ using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace FBI.Controllers
 {
@@ -18,7 +16,7 @@ namespace FBI.Controllers
         {
 
         }
-        
+
         [HttpPost]
         [Route("[action]")]
         public IActionResult Login([FromBody] User user)
@@ -28,7 +26,7 @@ namespace FBI.Controllers
             // else continue with flow below
 
             var claims = new List<Claim>
-            {  
+            {
                 new Claim("type", "Admin")
             };
 
