@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -22,7 +23,7 @@ namespace FBI.Controllers
         public IActionResult Login([FromBody] User user)
         {
             // TODO: Authenticate Admin with Database
-            // If not authentiated, return 401 Unauthorized
+            // If not authenticated, return 401 Unauthorized
             // else continue with flow below
 
             var claims = new List<Claim>
@@ -40,6 +41,16 @@ namespace FBI.Controllers
                 signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256));
 
             return new OkObjectResult(new JwtSecurityTokenHandler().WriteToken(token));
+        }
+
+        [HttpPost]
+        [Route("[action]")]
+        [Authorize(Policy = "Admin")]
+        public IActionResult GenerateBadge([FromBody] Agent agent)
+        {
+            // TODO: Add the agent to the database and return the agent object
+
+            return new CreatedResult("Agent/1", agent);
         }
 
     }
