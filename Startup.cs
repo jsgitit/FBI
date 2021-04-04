@@ -27,6 +27,7 @@ namespace FBI
             {
                 ValidIssuer = "https://fbi-demo.com",
                 ValidAudience = "https://fbi-demo.com",
+                //SXkSqsKy
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("SXkSqsKyNUyvGbnHs7ke2NCq8zQzNLW7mPmHbnZZ")), // length == 40 or 32??
                 ClockSkew = TimeSpan.Zero // remove delay of token when expire
             };
