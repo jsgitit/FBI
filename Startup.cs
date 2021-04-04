@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
 namespace FBI
@@ -26,6 +28,14 @@ namespace FBI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var tokenValidationParameters = new TokenValidationParameters
+            {
+                ValidIssuer = "https://fbi-demo.com",
+                ValidAudience = "https://fbi-demo.com",
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("SXkSqsKyNUyvGbnHs7ke2NCq8zQzNLW7mPmHbnZZ")), // length == 40 or 32??
+                ClockSkew = TimeSpan.Zero // remove delay of token when expire
+            };
+
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
