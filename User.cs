@@ -1,4 +1,4 @@
-﻿namespace FBI.Controllers
+﻿namespace FBI
 {
     public class User
     {

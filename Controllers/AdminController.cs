@@ -20,7 +20,7 @@ namespace FBI.Controllers
 
         [HttpPost]
         [Route("[action]")]
-        public IActionResult Login([FromBody] User user)
+        public ActionResult<string> Login([FromBody] User user)
         {
             // TODO: Authenticate Admin with Database
             // If not authenticated, return 401 Unauthorized
@@ -37,7 +37,7 @@ namespace FBI.Controllers
                 "https://fbi-demo.com",
                 "https://fbi-demo.com",
                 claims,
-                expires: DateTime.Now.AddDays(30),
+                expires: DateTime.Now.AddDays(30.0),
                 signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256));
 
             return new OkObjectResult(new JwtSecurityTokenHandler().WriteToken(token));
@@ -46,11 +46,25 @@ namespace FBI.Controllers
         [HttpPost]
         [Route("[action]")]
         [Authorize(Policy = "Admin")]
-        public IActionResult GenerateBadge([FromBody] Agent agent)
+        public IActionResult GenerateBadge([FromBody] Agent Agent)
         {
-            // TODO: Add the agent to the database and return the agent object
+            var Claims = new List<Claim>
+            {
+                 new Claim("type", "Agent"),
+                 new Claim("ClearanceLevel", Agent.ClearanceLevel.ToString())
+            };
 
-            return new CreatedResult("Agent/1", agent);
+            var Key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("SXkSqsKyNUyvGbnHs7ke2NCq8zQzNLW7mPmHbnZZ"));
+
+            var Token = new JwtSecurityToken(
+                "https://fbi-demo.com",
+                "https://fbi-demo.com",
+                Claims,
+                expires: DateTime.Now.AddDays(30.0),
+                signingCredentials: new SigningCredentials(Key, SecurityAlgorithms.HmacSha256)
+            );
+
+            return new OkObjectResult(new JwtSecurityTokenHandler().WriteToken(Token));
         }
 
     }
