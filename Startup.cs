@@ -66,7 +66,8 @@ namespace FBI
                         {
                             Reference = new OpenApiReference
                             {
-                                Type = ReferenceType.SecurityScheme, Id = "Bearer"
+                                Type = ReferenceType.SecurityScheme, 
+                                Id = "Bearer"
                             }
                         },
                         // following line changed to Array.Empty<string>()
