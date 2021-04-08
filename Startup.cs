@@ -45,7 +45,11 @@ namespace FBI
             {
                 cfg.AddPolicy("Admin", policy => policy.RequireClaim("type", "Admin"));
                 cfg.AddPolicy("Agent", policy => policy.RequireClaim("type", "Agent"));
-                cfg.AddPolicy("ClearanceLevel1", policy => policy.RequireClaim("ClearanceLevel", "1", "2"));
+                
+                // Agents must have Clearance Level 1 or 2 get to access public files
+                cfg.AddPolicy("ClearanceLevel1", policy => policy.RequireClaim("ClearanceLevel", "1", "2")); 
+                
+                // Only agents with Clearance Level 2 get to access classified files
                 cfg.AddPolicy("ClearanceLevel2", policy => policy.RequireClaim("ClearanceLevel", "2"));
             });
 
