@@ -34,9 +34,9 @@ namespace FBI.Controllers
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("SXkSqsKyNUyvGbnHs7ke2NCq8zQzNLW7mPmHbnZZ"));
 
             var token = new JwtSecurityToken(
-                "https://fbi-demo.com",
-                "https://fbi-demo.com",
-                claims,
+                issuer: "https://fbi-demo.com",
+                audience: "https://fbi-demo.com",
+                claims: claims,
                 expires: DateTime.Now.AddDays(30.0),
                 signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256));
 
