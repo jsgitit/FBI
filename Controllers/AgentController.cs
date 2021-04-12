@@ -7,7 +7,7 @@ namespace FBI.Controllers
     [ApiController]
     [Route("[controller]")]
     [Authorize(Policy = "Agent")]
-    public class AgentController : Controller
+    public class AgentController : ControllerBase
     {
         public AgentController()
         {
